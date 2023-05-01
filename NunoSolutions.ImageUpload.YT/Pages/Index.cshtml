@@ -1,0 +1,77 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<style>
+    .dropzone {
+        width: 400px;
+        height: 200px;
+        border: 2px dashed silver;
+        text-align: center;
+        line-height: 190px;
+        font-size: 1.5rem;
+        color: silver;
+    }
+
+        .dropzone:hover, .dropzone.hover {
+            border: 2px dashed #df691a;
+            color: #df691a;
+            cursor: pointer;
+        }
+</style>
+
+<div class="row">
+    <div class="col mb-2">
+        <input id="CustomFileName" type="text"
+               class="form-control" placeholder="Custom FileName..." />
+    </div>
+</div>
+
+<div class="dropzone"
+     ondragover="ImageDragOver(event)"
+     ondragleave="ImageDragLeave(event)"
+     ondrop="ImageDrop(event)"
+     title="Drag & drop image here...">
+    Drag & Drop Image Here...
+</div>
+
+<script>
+     ImageDragOver = function (event) {
+        event.preventDefault(); 
+        event.target.classList.add("hover");
+    }
+    ImageDragLeave = function (event) {
+        event.target.classList.remove("hover");
+    }
+    ImageDrop = function (event) {
+        event.preventDefault();
+        event.target.classList.remove("hover");
+
+        var file = event.dataTransfer.files[0];
+        var customFileName = document.getElementById("CustomFileName");
+        if (!customFileName.value) customFileName.value = file.name;
+
+        // Create our Form that we will post.
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('customFileName', customFileName.value);
+
+        fetch("api/upload/image", {
+            method: 'POST',
+            body: formData,
+        }).then(resp => {
+            return resp.json();
+        }).then(data => {
+            if (data.returnCode == 0) {
+                alert(data.returnMessage);
+            }
+            else {
+                alert("Error: " + data.returnMessage);
+            }
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+</script>
