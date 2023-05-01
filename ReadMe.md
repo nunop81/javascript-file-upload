@@ -5,4 +5,7 @@ In this ASP.NET Core web app, the user can `drag and drop` an image file on top 
 
 
 ## Repo
-https://github.com/nunop81/javascript-file-upload.git
+To clone this project, open your terminal and run the following command:
+```
+git clone https://github.com/nunop81/javascript-file-upload.git
+```
